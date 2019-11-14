@@ -1,9 +1,7 @@
 const http = require('http');
 const app = require('./app');
 
-const dotenv = require('dotenv');
-
-dotenv.config({ path: './config.env' });
+require('dotenv').config();
 
 // returns a valid port whether provided with number or string
 const normalizePort = val => {
