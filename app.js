@@ -1,5 +1,6 @@
 const express = require('express');
 const morgan = require('morgan');
+const userRoutes = require('./routes/user');
 
 const app = express();
 
@@ -25,4 +26,5 @@ app.use((req, res, next) => {
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+app.use('/api/v1/auth', userRoutes);
 module.exports = app;
