@@ -3,10 +3,11 @@ const db = require('../db/index');
 
 exports.checkIfAdmin = async (req, res, next) => {
   try {
-    const token = req.headers.authorization.split(' ')[1];
+    let token = req.headers.authorization;
     if (!token) {
-      Error('');
+      throw 'You need an authentication token to access this resource.';
     }
+    [, token] = token.split(' ');
     const decodedToken = jwt.verify(
       token,
       'I AM STILL Thinking of a token secret, wait for it! ..lol'
@@ -17,13 +18,14 @@ exports.checkIfAdmin = async (req, res, next) => {
       [userId, email]
     );
 
-    if (result.rows[0].isadmin) {
-      next();
+    if (!result.rows[0].isadmin) {
+      throw 'Invalid Request! Your need admin privileges to make this request.';
     }
+    next();
   } catch (error) {
     return res.status(401).json({
       status: 'error',
-      error: 'Invalid Request! Your need admin privileges to make this request.'
+      error
     });
   }
 };

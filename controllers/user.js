@@ -70,7 +70,7 @@ exports.createUser = async (req, res, next) => {
 exports.signin = async (req, res, next) => {
   try {
     if (!req.body.email || !req.body.password) {
-      Error('Incorrect request body');
+      throw 'Invalid request body';
     }
 
     const { rows } = await db.query('SELECT * FROM users WHERE email = $1', [
@@ -79,7 +79,7 @@ exports.signin = async (req, res, next) => {
 
     // if no email in database
     if (!rows[0]) {
-      Error('User not found');
+      throw 'User not found';
     }
     try {
       const { userid, email, password } = rows[0];
@@ -108,7 +108,7 @@ exports.signin = async (req, res, next) => {
         status: 'success',
         data: {
           userId: userid,
-          token: token
+          token
         }
       });
     } catch (err) {
