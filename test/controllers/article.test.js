@@ -3,13 +3,13 @@ const request = require('supertest');
 const app = require('../../app');
 const db = require('../../db/index');
 
-describe('POST /articles', function() {
+xdescribe('POST /articles', function() {
   before(async () => {
     await db.query(`DELETE FROM articles where title = $1`, ['Test artilce']);
   });
   const token =
     'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjMzA4Zjg3ZS1mODRkLTQ0NzktODBjZS1lNjhiNmI3NzFlZjMiLCJlbWFpbCI6InRyQHRlc3QuY29tIiwiaWF0IjoxNTc0MTczMjI5LCJleHAiOjE1NzQyNTk2Mjl9.26LS00-L_xm8JgKVndEkU6cNhrn_X_TT9cNXOd90_Rk';
-  it('should create a new article', async () => {
+  xit('should create a new article', async () => {
     const data = {
       title: 'Test artilce',
       article: 'An article for cool unit testing'
@@ -26,7 +26,7 @@ describe('POST /articles', function() {
     expect(body.data.message).to.contain('Article successfully posted');
   });
 
-  it('should return an errro if article request body is empty', async () => {
+  xit('should return an errro if article request body is empty', async () => {
     const data = {
       title: '',
       article: ''

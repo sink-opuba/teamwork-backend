@@ -11,7 +11,7 @@ describe('POST /create-user', () => {
   });
 
   const token =
-    'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjMzA4Zjg3ZS1mODRkLTQ0NzktODBjZS1lNjhiNmI3NzFlZjMiLCJlbWFpbCI6InRyQHRlc3QuY29tIiwiaWF0IjoxNTc0MTY5Mzg5LCJleHAiOjE1NzQyNTU3ODl9.aIqqZ0LNNU-bXizflSus8TJoF9dns80CbA8lduaRo9k';
+    'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjMzA4Zjg3ZS1mODRkLTQ0NzktODBjZS1lNjhiNmI3NzFlZjMiLCJlbWFpbCI6InRyQHRlc3QuY29tIiwiaWF0IjoxNTc0MTczMjI5LCJleHAiOjE1NzQyNTk2Mjl9.26LS00-L_xm8JgKVndEkU6cNhrn_X_TT9cNXOd90_Rk';
 
   it('should create a new user', done => {
     request(app)
