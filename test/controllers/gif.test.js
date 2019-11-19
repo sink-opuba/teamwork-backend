@@ -1,17 +1,22 @@
 const { expect } = require('chai');
 const request = require('supertest');
 const app = require('../../app');
+const db = require('../../db/index');
 
 describe('POST /gifs', function() {
-  this.timeout(8000);
+  before(async () => {
+    await db.query(`DELETE FROM gifs where title = $1`, ['a new gif test']);
+  });
   const token =
-    'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjMzA4Zjg3ZS1mODRkLTQ0NzktODBjZS1lNjhiNmI3NzFlZjMiLCJlbWFpbCI6InRyQHRlc3QuY29tIiwiaWF0IjoxNTc0MTY5Mzg5LCJleHAiOjE1NzQyNTU3ODl9.aIqqZ0LNNU-bXizflSus8TJoF9dns80CbA8lduaRo9k';
+    'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjMzA4Zjg3ZS1mODRkLTQ0NzktODBjZS1lNjhiNmI3NzFlZjMiLCJlbWFpbCI6InRyQHRlc3QuY29tIiwiaWF0IjoxNTc0MTczMjI5LCJleHAiOjE1NzQyNTk2Mjl9.26LS00-L_xm8JgKVndEkU6cNhrn_X_TT9cNXOd90_Rk';
 
-  it('should create a new gif', async () => {
+  it('should create a new gif', async function() {
+    this.timeout(10000);
+
     const res = await request(app)
       .post('/api/v1/gifs')
       .set('Authorization', token)
-      .field('title', 'a new gif')
+      .field('title', 'a new gif test')
       .attach('image', 'C:/Users/User/Pictures/giphyALC4.0.gif');
 
     const { body } = res;
