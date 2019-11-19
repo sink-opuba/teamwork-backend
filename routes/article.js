@@ -8,5 +8,6 @@ const articleCtrl = require('../controllers/article');
 const router = new Router();
 
 router.post('/', auth.checkIfUser, articleCtrl.createArticle);
+router.patch('/:articleId', auth.checkIfUser, articleCtrl.editArticle);
 
 module.exports = router;

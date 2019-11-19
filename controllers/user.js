@@ -33,7 +33,7 @@ exports.createUser = async (req, res, next) => {
     });
   }
   const queryString = `INSERT INTO users(userId, first_name, last_name,email,gender,password,job_role,department,address,isAdmin,date_created) 
-    VALUES(uuid_generate_v4(),$1, $2, $3, $4, $5, $6, $7, $8, $9, NOW());`;
+    VALUES(uuid_genera te_v4(),$1, $2, $3, $4, $5, $6, $7, $8, $9, NOW());`;
 
   // encrypt password
   bcrypt.hash(password, 10).then(async hash => {
