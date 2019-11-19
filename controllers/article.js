@@ -84,10 +84,53 @@ exports.editArticle = async (req, res, next) => {
     return res.status(200).json({
       status: 'success',
       data: {
-        message: 'Article successfully upadated',
+        message: 'Article successfully updated',
         title,
         article,
         updatedOn: updatedon
+      }
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: 'error',
+      error
+    });
+  }
+};
+
+exports.deleteArticle = async (req, res, next) => {
+  try {
+    const result = await db.query(
+      `SELECT * FROM articles where articleid = $1`,
+      [req.params.articleId]
+    );
+    if (!result.rows[0]) {
+      return res.status(404).json({
+        status: 'error',
+        error: 'article not found!'
+      });
+    }
+    const token = req.headers.authorization.split(' ')[1];
+    const decodedToken = jwt.verify(
+      token,
+      'I AM STILL Thinking of a token secret, wait for it! ..lol'
+    );
+    const { userId } = decodedToken;
+    // check if user is the creator of the article
+    if (userId !== result.rows[0].authorid) {
+      return res.status(401).json({
+        status: 'error',
+        error: "You're not authorised to delete this resource."
+      });
+    }
+    // Delete article from database
+    await db.query(`DELETE FROM articles where articleid = $1;`, [
+      req.params.articleId
+    ]);
+    return res.status(200).json({
+      status: 'success',
+      data: {
+        message: 'Article successfully deleted'
       }
     });
   } catch (error) {

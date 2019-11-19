@@ -9,5 +9,6 @@ const router = new Router();
 
 router.post('/', auth.checkIfUser, articleCtrl.createArticle);
 router.patch('/:articleId', auth.checkIfUser, articleCtrl.editArticle);
+router.delete('/:articleId', auth.checkIfUser, articleCtrl.deleteArticle);
 
 module.exports = router;
