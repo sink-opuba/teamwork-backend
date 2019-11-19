@@ -3,14 +3,14 @@ const request = require('supertest');
 const app = require('../../app');
 const db = require('../../db/index');
 
-xdescribe('POST /gifs', function() {
+describe('POST /gifs', function() {
   before(async () => {
     await db.query(`DELETE FROM gifs where title = $1`, ['a new gif test']);
   });
   const token =
     'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjMzA4Zjg3ZS1mODRkLTQ0NzktODBjZS1lNjhiNmI3NzFlZjMiLCJlbWFpbCI6InRyQHRlc3QuY29tIiwiaWF0IjoxNTc0MTczMjI5LCJleHAiOjE1NzQyNTk2Mjl9.26LS00-L_xm8JgKVndEkU6cNhrn_X_TT9cNXOd90_Rk';
 
-  xit('should create a new gif', async function() {
+  it('should create a new gif', async function() {
     this.timeout(10000);
 
     const res = await request(app)
