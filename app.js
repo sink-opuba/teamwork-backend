@@ -1,6 +1,7 @@
 const express = require('express');
 const morgan = require('morgan');
 const userRoutes = require('./routes/user');
+const gifRoutes = require('./routes/gif');
 
 const app = express();
 
@@ -27,4 +28,5 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 app.use('/api/v1/auth', userRoutes);
+app.use('/api/v1/gifs', gifRoutes);
 module.exports = app;

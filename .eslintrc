@@ -8,6 +8,7 @@
     "func-names": "off",
     "no-process-exit": "off",
     "no-param-reassign": "off",
+    "no-return-await": "off",
     "no-throw-literal": "off",
     "node/no-unpublished-require": [
       "error",
