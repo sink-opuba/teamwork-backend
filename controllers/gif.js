@@ -18,12 +18,8 @@ exports.createGif = async (req, res, next) => {
     );
     const { userId } = decodedToken;
     const values = [req.body.title, newPath.url, userId];
-    const queryString = `INSERT INTO gifs(title, imageurl, authorid, createdon) VALUES($1, $2, $3, NOW());`;
-    await db.query(queryString, values);
-    const result = await db.query(
-      `SELECT * FROM gifs where title = $1 AND imageurl = $2`,
-      [req.body.title, newPath.url]
-    );
+    const queryString = `INSERT INTO gifs(title, imageurl, authorid, createdon) VALUES($1, $2, $3, NOW()) RETURNING *;`;
+    const result = await db.query(queryString, values);
     const { gifid, title, imageurl, createdOn } = result.rows[0];
     // if all goes well
     res.status(201).json({
