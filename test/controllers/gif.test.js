@@ -39,7 +39,7 @@ describe('DELETE /gifs/:gifId', () => {
 
   it('should delete the article from the database', async () => {
     const res = await request(app)
-      .delete(`/api/v1/articles/${gifid}`)
+      .delete(`/api/v1/gifs/${gifid}`)
       .set('Authorization', token)
       .send();
 
