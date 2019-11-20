@@ -140,3 +140,50 @@ exports.deleteArticle = async (req, res, next) => {
     });
   }
 };
+
+exports.postComment = async (req, res, next) => {
+  if (!req.body.comment) {
+    return res.status(400).json({
+      status: 'error',
+      error: 'Invalid comment request body'
+    });
+  }
+  try {
+    const token = req.headers.authorization.split(' ')[1];
+    const decodedToken = jwt.verify(
+      token,
+      'I AM STILL Thinking of a token secret, wait for it! ..lol'
+    );
+    const { userId } = decodedToken;
+
+    // commentid | comment | authorid | articleid | gifid | createdon;
+    const queryString = `INSERT INTO comments(comment, authorid, articleid, createdon) VALUES($1, $2, $3, NOW()) RETURNING *;`;
+    const values = [req.body.comment, userId, req.params.articleId];
+    const insertResult = await db.query(queryString, values);
+    const { comment, articleid, createdon: createdOn } = insertResult.rows[0];
+    const result = await db.query(
+      `SELECT title, article FROM articles where articleid = $1`,
+      [articleid]
+    );
+    const { title: articleTitle, article } = result.rows[0];
+    res.status(201).json({
+      status: 'success',
+      data: {
+        message: 'comment successfully posted',
+        createdOn,
+        articleTitle,
+        article,
+        comment
+      }
+    });
+
+    res.send({
+      message: 'got it'
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: 'error',
+      error
+    });
+  }
+};

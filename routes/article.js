@@ -10,5 +10,6 @@ const router = new Router();
 router.post('/', auth.checkIfUser, articleCtrl.createArticle);
 router.patch('/:articleId', auth.checkIfUser, articleCtrl.editArticle);
 router.delete('/:articleId', auth.checkIfUser, articleCtrl.deleteArticle);
+router.post('/:articleId/comment', auth.checkIfUser, articleCtrl.postComment);
 
 module.exports = router;

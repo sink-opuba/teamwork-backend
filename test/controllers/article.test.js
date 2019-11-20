@@ -4,7 +4,7 @@ const app = require('../../app');
 const db = require('../../db/index');
 
 const token =
-  'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjMzA4Zjg3ZS1mODRkLTQ0NzktODBjZS1lNjhiNmI3NzFlZjMiLCJlbWFpbCI6InRyQHRlc3QuY29tIiwiaWF0IjoxNTc0MTczMjI5LCJleHAiOjE1NzQyNTk2Mjl9.26LS00-L_xm8JgKVndEkU6cNhrn_X_TT9cNXOd90_Rk';
+  'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjMzA4Zjg3ZS1mODRkLTQ0NzktODBjZS1lNjhiNmI3NzFlZjMiLCJlbWFpbCI6InRyQHRlc3QuY29tIiwiaWF0IjoxNTc0MjgyMjM0LCJleHAiOjE1NzQzNjg2MzR9.kG1EPCp9zqs15IeASQY2l6oLbLtgHGKerjIXkyHej5s';
 
 describe('POST /articles', function() {
   before(async () => {
@@ -91,5 +91,35 @@ describe('DELETE /articles/:articleId', () => {
     expect(res.status).to.equal(200);
     expect(body.status).to.contain('success');
     expect(body.data.message).to.contain('Article successfully deleted');
+  });
+});
+
+describe('POST /:articleid/comment', () => {
+  before(async () => {
+    await db.query(`DELETE FROM comments where comment = $1`, ['Test comment']);
+  });
+
+  it('should add comment to article post', async () => {
+    const res = await request(app)
+      .post('/api/v1/articles/3/comment')
+      .set('Authorization', token)
+      .send({ comment: 'Test comment' });
+
+    const { body, status } = res;
+    expect(status).to.equal(201);
+    expect(body.status).to.contain('success');
+    expect(body.data).to.contain.property('comment');
+    expect(body.data.message).to.contain('comment successfully posted');
+  });
+
+  it('should return an error when user attempts to add comment to non-existent article', async () => {
+    const res = await request(app)
+      .post('/api/v1/articles/0/comment')
+      .set('Authorization', token)
+      .send({ comment: 'Test comment' });
+
+    const { body, status } = res;
+    expect(status).to.equal(500);
+    expect(body.status).to.contain('error');
   });
 });
