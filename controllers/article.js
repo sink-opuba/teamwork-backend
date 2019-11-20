@@ -166,7 +166,7 @@ exports.postComment = async (req, res, next) => {
       [articleid]
     );
     const { title: articleTitle, article } = result.rows[0];
-    res.status(201).json({
+    return res.status(201).json({
       status: 'success',
       data: {
         message: 'comment successfully posted',
@@ -175,10 +175,6 @@ exports.postComment = async (req, res, next) => {
         article,
         comment
       }
-    });
-
-    res.send({
-      message: 'got it'
     });
   } catch (error) {
     res.status(500).json({

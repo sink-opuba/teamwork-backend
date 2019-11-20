@@ -5,6 +5,8 @@ const db = require('../../db/index');
 
 const token =
   'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjMzA4Zjg3ZS1mODRkLTQ0NzktODBjZS1lNjhiNmI3NzFlZjMiLCJlbWFpbCI6InRyQHRlc3QuY29tIiwiaWF0IjoxNTc0MjgyMjM0LCJleHAiOjE1NzQzNjg2MzR9.kG1EPCp9zqs15IeASQY2l6oLbLtgHGKerjIXkyHej5s';
+const differentToken =
+  'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIwOTJlNmZlZC05MmI1LTRkY2EtOWQ4YS02NjIwMjUyMWQ5NTEiLCJlbWFpbCI6Im51bUBudW0uY29tIiwiaWF0IjoxNTc0Mjg5NTE4LCJleHAiOjE1NzQzNzU5MTh9.HKx-Zl_eR8B-JekR7YXfR5b-rui-4W3JCr1zDukea-E';
 
 describe('POST /articles', function() {
   before(async () => {
@@ -79,6 +81,19 @@ describe('DELETE /articles/:articleId', () => {
       'Test artilce'
     ]);
     articleid = response.rows[0].articleid;
+  });
+
+  it("should return 401 error if user attempts to delete another user's article", async () => {
+    const res = await request(app)
+      .delete(`/api/v1/articles/${articleid}`)
+      .set('Authorization', differentToken)
+      .send();
+    const { body, status } = res;
+    expect(status).to.equal(401);
+    expect(body.status).to.contain('error');
+    expect(body.error).to.contain(
+      "You're not authorised to delete this resource."
+    );
   });
 
   it('should delete the article from the database', async () => {

@@ -6,7 +6,10 @@ const db = require('../../db/index');
 const token =
   'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjMzA4Zjg3ZS1mODRkLTQ0NzktODBjZS1lNjhiNmI3NzFlZjMiLCJlbWFpbCI6InRyQHRlc3QuY29tIiwiaWF0IjoxNTc0MjgyMjM0LCJleHAiOjE1NzQzNjg2MzR9.kG1EPCp9zqs15IeASQY2l6oLbLtgHGKerjIXkyHej5s';
 
-describe('POST /gifs', function() {
+const differentToken =
+  'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIwOTJlNmZlZC05MmI1LTRkY2EtOWQ4YS02NjIwMjUyMWQ5NTEiLCJlbWFpbCI6Im51bUBudW0uY29tIiwiaWF0IjoxNTc0Mjg5NTE4LCJleHAiOjE1NzQzNzU5MTh9.HKx-Zl_eR8B-JekR7YXfR5b-rui-4W3JCr1zDukea-E';
+
+  describe('POST /gifs', function() {
   before(async () => {
     await db.query(`DELETE FROM gifs where title = $1`, ['a new gif test']);
   });
@@ -37,6 +40,19 @@ describe('DELETE /gifs/:gifId', () => {
     gifid = response.rows[0].gifid;
   });
 
+  it("should return 401 error if user attempts to delete another user's gif post", async () => {
+    const res = await request(app)
+      .delete(`/api/v1/gifs/${gifid}`)
+      .set('Authorization', differentToken)
+      .send();
+    const { body, status } = res;
+    expect(status).to.equal(401);
+    expect(body.status).to.contain('error');
+    expect(body.error).to.contain(
+      "You're not authorised to delete this resource."
+    );
+  });
+
   it('should delete the gif from the database', async () => {
     const res = await request(app)
       .delete(`/api/v1/gifs/${gifid}`)
@@ -47,5 +63,37 @@ describe('DELETE /gifs/:gifId', () => {
     expect(res.status).to.equal(200);
     expect(body.status).to.contain('success');
     expect(body.data.message).to.contain('gif post successfully deleted');
+  });
+});
+
+describe('POST /:gifid/comment', () => {
+  before(async () => {
+    await db.query(`DELETE FROM comments where comment = $1`, [
+      'Test gif comment'
+    ]);
+  });
+
+  it('should add comment to gif post', async () => {
+    const res = await request(app)
+      .post('/api/v1/gifs/39/comment')
+      .set('Authorization', token)
+      .send({ comment: 'Test gif comment' });
+
+    const { body, status } = res;
+    expect(status).to.equal(201);
+    expect(body.status).to.contain('success');
+    expect(body.data).to.contain.property('comment');
+    expect(body.data.message).to.contain('comment successfully posted');
+  });
+
+  it('should return an error when user attempts to add comment to non-existent gif', async () => {
+    const res = await request(app)
+      .post('/api/v1/gifs/0/comment')
+      .set('Authorization', token)
+      .send({ comment: 'Test gif comment' });
+
+    const { body, status } = res;
+    expect(status).to.equal(500);
+    expect(body.status).to.contain('error');
   });
 });

@@ -10,5 +10,6 @@ const router = new Router();
 
 router.post('/', auth.checkIfUser, multerUpload, gifCtrl.createGif);
 router.delete('/:gifId', auth.checkIfUser, gifCtrl.deleteGif);
+router.post('/:gifId/comment', auth.checkIfUser, gifCtrl.postGif);
 
 module.exports = router;
