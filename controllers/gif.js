@@ -39,3 +39,43 @@ exports.createGif = async (req, res, next) => {
     });
   }
 };
+
+exports.deleteGif = async (req, res, next) => {
+  try {
+    const result = await db.query(`SELECT * FROM gifs where gifid = $1`, [
+      req.params.gifId
+    ]);
+    if (!result.rows[0]) {
+      return res.status(404).json({
+        status: 'error',
+        error: 'gif not found!'
+      });
+    }
+    const token = req.headers.authorization.split(' ')[1];
+    const decodedToken = jwt.verify(
+      token,
+      'I AM STILL Thinking of a token secret, wait for it! ..lol'
+    );
+    const { userId } = decodedToken;
+    // check if user is the creator of the article
+    if (userId !== result.rows[0].authorid) {
+      return res.status(401).json({
+        status: 'error',
+        error: "You're not authorised to delete this resource."
+      });
+    }
+    // Delete article from database
+    await db.query(`DELETE FROM gifs where gifid = $1;`, [req.params.gifId]);
+    return res.status(200).json({
+      status: 'success',
+      data: {
+        message: 'gif post successfully deleted'
+      }
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: 'error',
+      error
+    });
+  }
+};
