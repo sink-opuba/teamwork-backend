@@ -9,13 +9,13 @@ const token =
 const differentToken =
   'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIwOTJlNmZlZC05MmI1LTRkY2EtOWQ4YS02NjIwMjUyMWQ5NTEiLCJlbWFpbCI6Im51bUBudW0uY29tIiwiaWF0IjoxNTc0Mjg5NTE4LCJleHAiOjE1NzQzNzU5MTh9.HKx-Zl_eR8B-JekR7YXfR5b-rui-4W3JCr1zDukea-E';
 
-  describe('POST /gifs', function() {
+describe('POST /gifs', function() {
   before(async () => {
     await db.query(`DELETE FROM gifs where title = $1`, ['a new gif test']);
   });
 
   it('should create a new gif', async function() {
-    this.timeout(10000);
+    this.timeout(12000);
 
     const res = await request(app)
       .post('/api/v1/gifs')
