@@ -98,6 +98,45 @@ exports.editArticle = async (req, res, next) => {
   }
 };
 
+exports.getArticle = async (req, res, next) => {
+  try {
+    const articleResult = await db.query(
+      `SELECT * FROM articles WHERE articleId = $1`,
+      [req.params.articleId]
+    );
+    if (!articleResult.rows[0]) {
+      return res
+        .status(404)
+        .json({ status: 'error', error: 'Article not found' });
+    }
+
+    const {
+      title,
+      article,
+      articleid: id,
+      createdon: createdOn
+    } = articleResult.rows[0];
+
+    const commentResult = await db.query(
+      `SELECT commentId, comment, authorId, createdOn FROM comments where articleId = $1`,
+      [id]
+    );
+
+    res.status(200).json({
+      status: 'success',
+      data: {
+        id,
+        createdOn,
+        title,
+        article,
+        comments: commentResult.rows
+      }
+    });
+  } catch (error) {
+    res.status(500).json({ status: 'error', error });
+  }
+};
+
 exports.deleteArticle = async (req, res, next) => {
   try {
     const result = await db.query(

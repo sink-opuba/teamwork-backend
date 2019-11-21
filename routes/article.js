@@ -8,6 +8,7 @@ const articleCtrl = require('../controllers/article');
 const router = new Router();
 
 router.post('/', auth.checkIfUser, articleCtrl.createArticle);
+router.get('/:articleId', auth.checkIfUser, articleCtrl.getArticle);
 router.patch('/:articleId', auth.checkIfUser, articleCtrl.editArticle);
 router.delete('/:articleId', auth.checkIfUser, articleCtrl.deleteArticle);
 router.post('/:articleId/comment', auth.checkIfUser, articleCtrl.postComment);
