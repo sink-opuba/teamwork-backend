@@ -74,6 +74,39 @@ describe('PATCH /articles/:articleId', () => {
   });
 });
 
+describe('GET /articles/:articleId', () => {
+  let articleid;
+  before(async () => {
+    const response = await db.query(`SELECT * FROM articles where title = $1`, [
+      'Test artilce'
+    ]);
+    articleid = response.rows[0].articleid;
+  });
+
+  it('should get specific article with details and associated comments', async () => {
+    const res = await request(app)
+      .get(`/api/v1/articles/${articleid}`)
+      .set('Authorization', token)
+      .send();
+    const { body, status } = res;
+    expect(status).to.equal(200);
+    expect(body.status).to.contain('success');
+    expect(body.data).to.contain.property('comments');
+    expect(body.data.comments).to.be.an('array');
+  });
+
+  it('should return an error when user attempts to get details and associated comments of non-exitent article', async () => {
+    const res = await request(app)
+      .get('/api/v1/articles/0')
+      .set('Authorization', token)
+      .send();
+    const { body, status } = res;
+    expect(status).to.equal(404);
+    expect(body.status).to.contain('error');
+    expect(body.error).to.contain('Article not found');
+  });
+});
+
 describe('DELETE /articles/:articleId', () => {
   let articleid;
   before(async () => {

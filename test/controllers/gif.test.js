@@ -31,6 +31,39 @@ describe('POST /gifs', function() {
   });
 });
 
+describe('GET /gifs/:gifId', () => {
+  let gifid;
+  before(async () => {
+    const response = await db.query(`SELECT * FROM gifs where title = $1`, [
+      'a new gif test'
+    ]);
+    gifid = response.rows[0].gifid;
+  });
+
+  it('should get specific gif with details and associated comments', async () => {
+    const res = await request(app)
+      .get(`/api/v1/gifs/${gifid}`)
+      .set('Authorization', token)
+      .send();
+    const { body, status } = res;
+    expect(status).to.equal(200);
+    expect(body.status).to.contain('success');
+    expect(body.data).to.contain.property('comments');
+    expect(body.data.comments).to.be.an('array');
+  });
+
+  it('should return an error when user attempts to get details and associated comments of non-exitent gif', async () => {
+    const res = await request(app)
+      .get(`/api/v1/gifs/0`)
+      .set('Authorization', token)
+      .send();
+    const { body, status } = res;
+    expect(status).to.equal(404);
+    expect(body.status).to.contain('error');
+    expect(body.error).to.contain('Gif not found');
+  });
+});
+
 describe('DELETE /gifs/:gifId', () => {
   let gifid;
   before(async () => {
