@@ -9,6 +9,7 @@ const gifCtrl = require('../controllers/gif');
 const router = new Router();
 
 router.post('/', auth.checkIfUser, multerUpload, gifCtrl.createGif);
+router.get('/:gifId', auth.checkIfUser, gifCtrl.getGif);
 router.delete('/:gifId', auth.checkIfUser, gifCtrl.deleteGif);
 router.post('/:gifId/comment', auth.checkIfUser, gifCtrl.postGif);
 

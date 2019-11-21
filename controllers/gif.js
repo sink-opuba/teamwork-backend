@@ -120,3 +120,39 @@ exports.postGif = async (req, res, next) => {
     });
   }
 };
+
+exports.getGif = async (req, res, next) => {
+  try {
+    const gifResult = await db.query(`SELECT * FROM gifs WHERE gifId = $1`, [
+      req.params.gifId
+    ]);
+    if (!gifResult.rows[0]) {
+      return res.status(404).json({ status: 'error', error: 'Gif not found' });
+    }
+
+    const {
+      title,
+      imageurl: url,
+      gifid: id,
+      createdon: createdOn
+    } = gifResult.rows[0];
+
+    const commentResult = await db.query(
+      `SELECT commentId, comment, authorId, createdOn FROM comments where gifId = $1`,
+      [id]
+    );
+
+    res.status(200).json({
+      status: 'success',
+      data: {
+        id,
+        createdOn,
+        title,
+        url,
+        comments: commentResult.rows
+      }
+    });
+  } catch (error) {
+    res.status(500).json({ status: 'error', error });
+  }
+};

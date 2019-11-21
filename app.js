@@ -4,6 +4,7 @@ const userRoutes = require('./routes/user');
 const articleRoutes = require('./routes/article');
 const gifRoutes = require('./routes/gif');
 const feedRoutes = require('./routes/feed');
+
 const app = express();
 
 // MIDDLEWARES
