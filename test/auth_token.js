@@ -1,0 +1,8 @@
+module.exports = {
+  // tr@test.com password
+  token:
+    'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjMzA4Zjg3ZS1mODRkLTQ0NzktODBjZS1lNjhiNmI3NzFlZjMiLCJlbWFpbCI6InRyQHRlc3QuY29tIiwiaWF0IjoxNTc0MzczOTEwLCJleHAiOjE1NzQ0NjAzMTB9.Ur6w5x_sWUa7uM0lYZOE6Ike_yxfDHTGLBfcZh2Flm4',
+  // num@num.com 123456
+  differentToken:
+    'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIwOTJlNmZlZC05MmI1LTRkY2EtOWQ4YS02NjIwMjUyMWQ5NTEiLCJlbWFpbCI6Im51bUBudW0uY29tIiwiaWF0IjoxNTc0MzczNjY5LCJleHAiOjE1NzQ0NjAwNjl9.kWOc4-aBgeMFHy5LKL5fQ7q1UhPpaOxazJLl1qLOSJE'
+};

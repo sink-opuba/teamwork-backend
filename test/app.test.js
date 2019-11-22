@@ -1,7 +1,7 @@
-const expect = require('chai').expect;
+const { expect } = require('chai');
 
-describe('pass suite', () => {
-  it('should pass the build', () => {
+describe('Run App', () => {
+  it('should run the app', () => {
     expect(true).to.equal(true);
   });
 });
