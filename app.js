@@ -6,7 +6,6 @@ const gifRoutes = require('./routes/gif');
 const feedRoutes = require('./routes/feed');
 
 const app = express();
-
 // MIDDLEWARES
 if (process.env.NODE_ENV === 'development') {
   // log request info to the console

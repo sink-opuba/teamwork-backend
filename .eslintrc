@@ -24,6 +24,8 @@
     ]
   },
   "env": {
-    "mocha": true
+    "mocha": true,
+    "node": true,
+    "commonjs": true
   }
 }

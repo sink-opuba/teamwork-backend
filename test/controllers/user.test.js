@@ -2,6 +2,7 @@ const { expect } = require('chai');
 const request = require('supertest');
 const app = require('../../app');
 const db = require('../../db/index');
+const { token } = require('../auth_token');
 
 describe('POST /create-user', () => {
   before(done => {
@@ -9,9 +10,6 @@ describe('POST /create-user', () => {
       .then(() => done())
       .catch(err => done(err));
   });
-
-  const token =
-    'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjMzA4Zjg3ZS1mODRkLTQ0NzktODBjZS1lNjhiNmI3NzFlZjMiLCJlbWFpbCI6InRyQHRlc3QuY29tIiwiaWF0IjoxNTc0MjgyMjM0LCJleHAiOjE1NzQzNjg2MzR9.kG1EPCp9zqs15IeASQY2l6oLbLtgHGKerjIXkyHej5s';
 
   it('should create a new user', done => {
     request(app)

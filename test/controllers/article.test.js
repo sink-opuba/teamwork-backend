@@ -2,11 +2,7 @@ const { expect } = require('chai');
 const request = require('supertest');
 const app = require('../../app');
 const db = require('../../db/index');
-
-const token =
-  'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjMzA4Zjg3ZS1mODRkLTQ0NzktODBjZS1lNjhiNmI3NzFlZjMiLCJlbWFpbCI6InRyQHRlc3QuY29tIiwiaWF0IjoxNTc0MjgyMjM0LCJleHAiOjE1NzQzNjg2MzR9.kG1EPCp9zqs15IeASQY2l6oLbLtgHGKerjIXkyHej5s';
-const differentToken =
-  'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIwOTJlNmZlZC05MmI1LTRkY2EtOWQ4YS02NjIwMjUyMWQ5NTEiLCJlbWFpbCI6Im51bUBudW0uY29tIiwiaWF0IjoxNTc0Mjg5NTE4LCJleHAiOjE1NzQzNzU5MTh9.HKx-Zl_eR8B-JekR7YXfR5b-rui-4W3JCr1zDukea-E';
+const { token, differentToken } = require('../auth_token');
 
 describe('POST /articles', function() {
   before(async () => {
