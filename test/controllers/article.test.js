@@ -103,6 +103,42 @@ describe('GET /articles/:articleId', () => {
   });
 });
 
+describe('POST /:articleid/comment', () => {
+  let articleid;
+  before(async () => {
+    await db.query(`DELETE FROM comments where comment = $1`, ['Test comment']);
+
+    const response = await db.query(`SELECT * FROM articles where title = $1`, [
+      'Test artilce'
+    ]);
+    articleid = response.rows[0].articleid;
+  });
+
+  it('should add comment to article post', async () => {
+    const res = await request(app)
+      .post(`/api/v1/articles/${articleid}/comment`)
+      .set('Authorization', token)
+      .send({ comment: 'Test comment' });
+
+    const { body, status } = res;
+    expect(status).to.equal(201);
+    expect(body.status).to.contain('success');
+    expect(body.data).to.contain.property('comment');
+    expect(body.data.message).to.contain('comment successfully posted');
+  });
+
+  it('should return an error when user attempts to add comment to non-existent article', async () => {
+    const res = await request(app)
+      .post('/api/v1/articles/0/comment')
+      .set('Authorization', token)
+      .send({ comment: 'Test comment' });
+
+    const { body, status } = res;
+    expect(status).to.equal(500);
+    expect(body.status).to.contain('error');
+  });
+});
+
 describe('DELETE /articles/:articleId', () => {
   let articleid;
   before(async () => {
@@ -135,36 +171,6 @@ describe('DELETE /articles/:articleId', () => {
     expect(res.status).to.equal(200);
     expect(body.status).to.contain('success');
     expect(body.data.message).to.contain('Article successfully deleted');
-  });
-});
-
-describe('POST /:articleid/comment', () => {
-  before(async () => {
-    await db.query(`DELETE FROM comments where comment = $1`, ['Test comment']);
-  });
-
-  it('should add comment to article post', async () => {
-    const res = await request(app)
-      .post('/api/v1/articles/3/comment')
-      .set('Authorization', token)
-      .send({ comment: 'Test comment' });
-
-    const { body, status } = res;
-    expect(status).to.equal(201);
-    expect(body.status).to.contain('success');
-    expect(body.data).to.contain.property('comment');
-    expect(body.data.message).to.contain('comment successfully posted');
-  });
-
-  it('should return an error when user attempts to add comment to non-existent article', async () => {
-    const res = await request(app)
-      .post('/api/v1/articles/0/comment')
-      .set('Authorization', token)
-      .send({ comment: 'Test comment' });
-
-    const { body, status } = res;
-    expect(status).to.equal(500);
-    expect(body.status).to.contain('error');
   });
 });
 
