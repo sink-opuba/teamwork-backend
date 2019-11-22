@@ -15,9 +15,9 @@ before_script:
   - psql -c 'CREATE DATABASE teamwork_api;' -U postgres
   - psql -c "CREATE USER api_user WITH PASSWORD 'password';" -U postgres
   - psql -c "ALTER ROLE api_user SUPERUSER;" -U postgres
-  - psql -f 'db/schema.sql'
+  - psql -f "db/schema.sql" teamwork_api
 after_success: coveralls
-notifications: 
-  email: 
-    recipients: 
+notifications:
+  email:
+    recipients:
       - sinkopus2000@gmail.com
