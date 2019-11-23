@@ -7,7 +7,6 @@ coverage
 # nyc test coverage
 .nyc_output
 
->>>>>>> develop
 # node-waf configuration
 .lock-wscript
 
