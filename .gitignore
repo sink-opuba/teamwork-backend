@@ -2,6 +2,12 @@
 # Coverage directory used by tools like istanbul
 coverage
 .coveralls.yml
+
+
+# nyc test coverage
+.nyc_output
+
+>>>>>>> develop
 # node-waf configuration
 .lock-wscript
 
