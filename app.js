@@ -32,12 +32,14 @@ app.use((req, res, next) => {
   next();
 });
 
-const limiter = rateLImit({
-  windowMs: 1 * 60 * 1000, // 1 minute
-  max: 5 // 5 requests,
-});
+if (process.env.NODE_ENV === 'production') {
+  const limiter = rateLImit({
+    windowMs: 1 * 60 * 1000, // 1 minute
+    max: 5 // 5 requests,
+  });
+  app.use(limiter);
+}
 
-app.use(limiter);
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
