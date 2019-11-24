@@ -1,5 +1,8 @@
 const express = require('express');
 const morgan = require('morgan');
+const compression = require('compression');
+const helmet = require('helmet');
+const rateLImit = require('express-rate-limit');
 const userRoutes = require('./routes/user');
 const articleRoutes = require('./routes/article');
 const gifRoutes = require('./routes/gif');
@@ -11,6 +14,10 @@ if (process.env.NODE_ENV === 'development') {
   // log request info to the console
   app.use(morgan('dev'));
 }
+
+app.use(compression());
+app.use(helmet());
+
 // handle cors issues
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -25,6 +32,12 @@ app.use((req, res, next) => {
   next();
 });
 
+const limiter = rateLImit({
+  windowMs: 1 * 60 * 1000, // 1 minute
+  max: 5 // 5 requests,
+});
+
+app.use(limiter);
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
