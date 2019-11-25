@@ -7,6 +7,7 @@ const userRoutes = require('./routes/user');
 const articleRoutes = require('./routes/article');
 const gifRoutes = require('./routes/gif');
 const feedRoutes = require('./routes/feed');
+const getDocsRoutes = require('./api_docs/docs');
 
 const app = express();
 // MIDDLEWARES
@@ -47,4 +48,9 @@ app.use('/api/v1/auth', userRoutes);
 app.use('/api/v1/articles', articleRoutes);
 app.use('/api/v1/gifs', gifRoutes);
 app.use('/api/v1/feed', feedRoutes);
+
+app.use('/', getDocsRoutes);
+app.use('/docs', getDocsRoutes);
+app.use('/api/v1/docs', getDocsRoutes);
+
 module.exports = app;
