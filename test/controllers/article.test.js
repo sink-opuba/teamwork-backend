@@ -104,15 +104,15 @@ describe('GET /articles/:articleId', () => {
 });
 
 describe('POST /:articleid/comment', () => {
-  let articleid;
-  before(async () => {
-    await db.query(`DELETE FROM comments where comment = $1`, ['Test comment']);
+  // let articleid;
+  // before(async () => {
+  //   await db.query(`DELETE FROM comments where comment = $1`, ['Test comment']);
 
-    const response = await db.query(`SELECT * FROM articles where title = $1`, [
-      'Test artilce'
-    ]);
-    articleid = response.rows[0].articleid;
-  });
+  //   const response = await db.query(`SELECT * FROM articles where title = $1`, [
+  //     'Test artilce'
+  //   ]);
+  //   // articleid = response.rows[0].articleid;
+  // });
 
   // it('should add comment to article post', async () => {
   //   const res = await request(app)
