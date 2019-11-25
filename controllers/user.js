@@ -69,6 +69,7 @@ exports.createUser = async (req, res, next) => {
 
 exports.signin = async (req, res, next) => {
   try {
+    req.body.email = req.body.email || req.body.username;
     if (!req.body.email || !req.body.password) {
       throw 'Invalid request body';
     }
